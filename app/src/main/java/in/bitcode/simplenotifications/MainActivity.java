@@ -8,7 +8,9 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(
                                 MainActivity.this,
-                                getNotificationChannelId()
+                                //getNotificationChannelId()
+                                null
                         );
 
                 builder.setContentTitle("BitCode");
@@ -52,10 +55,21 @@ public class MainActivity extends AppCompatActivity {
                 builder.setVibrate( new long[]{400, 200, 400, 200, 400, 200, 400, 300} );
                 //builder.setSound(Uri.parse("path to the audio file"));
                 builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
+                builder.setOngoing(true);
+                builder.setAutoCancel(true);
                 //builder.setAutoCancel(true);
                 builder.setNumber(9);
                 builder.setCategory(NotificationCompat.CATEGORY_EVENT);
+
+                //setting action to notification - PendingIntent
+                Intent intent = new Intent(MainActivity.this, NewActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        MainActivity.this,
+                        0,
+                        intent,
+                        0
+                );
+                builder.setContentIntent(pendingIntent);
 
                 Notification notification = builder.build();
                 mNotificationManager.notify(NOTIFICATION_BITCODE_ALERT, notification);
